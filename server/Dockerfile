@@ -74,7 +74,7 @@ COPY --chmod=777 ../.devcontainer/mobile/container-mobile-post-create.sh /immich
 RUN dart --disable-analytics
 
 FROM dev AS prod
-
+LABEL org.opencontainers.image.source https://github.com/vhvy/immich
 COPY server .
 RUN npm run build
 RUN npm prune --omit=dev --omit=optional

@@ -5,6 +5,7 @@
 !.vscode/launch.json
 !.vscode/extensions.json
 .idea
+*.csv
 
 docker/upload
 docker/library

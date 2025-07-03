@@ -240,6 +240,24 @@ export class MetadataService extends BaseService {
       if (reverseGeocoding.enabled) {
         geo = await this.mapRepository.reverseGeocode({ latitude, longitude });
       }
+    } else {
+      const timestamp = Math.floor(new Date(dates.dateTimeOriginal).getTime() / 1000);
+      const response = await fetch(`http://geo-server:33000?time=${timestamp}`);
+      type ResponseData = {
+        data: {
+          lat: number;
+          lon: number;
+        } | null
+      };
+      const result = await response.json() as ResponseData;
+      if (result.data) {
+        const { lon, lat } = result.data;
+        latitude = lat;
+        longitude = lon;
+        if (reverseGeocoding.enabled) {
+          geo = await this.mapRepository.reverseGeocode({ latitude, longitude });
+        }
+      }
     }
 
     const exifData: Insertable<ExifTable> = {

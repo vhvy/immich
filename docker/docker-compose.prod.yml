@@ -10,6 +10,18 @@
 name: immich-prod
 
 services:
+  geo-server:
+    build:
+      context: ../geo-server
+      dockerfile: Dockerfile
+    image: ghcr.io/vhvy/immich-geo-server:latest
+    container_name: immich_geo_server
+    restart: unless-stopped
+    env_file:
+      - .env
+    volumes:
+      - ~/data.csv:/mnt/data.csv:ro
+
   immich-server:
     container_name: immich_server
     image: immich-server:latest
