@@ -1,11 +1,6 @@
 part of 'base_asset.model.dart';
 
-enum AssetVisibility {
-  timeline,
-  hidden,
-  archive,
-  locked,
-}
+enum AssetVisibility { timeline, hidden, archive, locked }
 
 // Model for an asset stored in the server
 class RemoteAsset extends BaseAsset {
@@ -14,6 +9,7 @@ class RemoteAsset extends BaseAsset {
   final String? thumbHash;
   final AssetVisibility visibility;
   final String ownerId;
+  final String? stackId;
 
   const RemoteAsset({
     required this.id,
@@ -30,16 +26,15 @@ class RemoteAsset extends BaseAsset {
     super.isFavorite = false,
     this.thumbHash,
     this.visibility = AssetVisibility.timeline,
+    super.livePhotoVideoId,
+    this.stackId,
   });
 
   @override
-  AssetState get storage =>
-      localId == null ? AssetState.remote : AssetState.merged;
+  AssetState get storage => localId == null ? AssetState.remote : AssetState.merged;
 
   @override
   String get heroTag => '${localId ?? checksum}_$id';
-
-  bool get hasLocal => localId != null;
 
   @override
   String toString() {
@@ -57,9 +52,13 @@ class RemoteAsset extends BaseAsset {
     isFavorite: $isFavorite,
     thumbHash: ${thumbHash ?? "<NA>"},
     visibility: $visibility,
+    stackId: ${stackId ?? "<NA>"},
+    checksum: $checksum,
+    livePhotoVideoId: ${livePhotoVideoId ?? "<NA>"},
  }''';
   }
 
+  // Not checking for localId here
   @override
   bool operator ==(Object other) {
     if (other is! RemoteAsset) return false;
@@ -67,9 +66,9 @@ class RemoteAsset extends BaseAsset {
     return super == other &&
         id == other.id &&
         ownerId == other.ownerId &&
-        localId == other.localId &&
         thumbHash == other.thumbHash &&
-        visibility == other.visibility;
+        visibility == other.visibility &&
+        stackId == other.stackId;
   }
 
   @override
@@ -79,5 +78,44 @@ class RemoteAsset extends BaseAsset {
       ownerId.hashCode ^
       localId.hashCode ^
       thumbHash.hashCode ^
-      visibility.hashCode;
+      visibility.hashCode ^
+      stackId.hashCode;
+
+  RemoteAsset copyWith({
+    String? id,
+    String? localId,
+    String? name,
+    String? ownerId,
+    String? checksum,
+    AssetType? type,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+    int? width,
+    int? height,
+    int? durationInSeconds,
+    bool? isFavorite,
+    String? thumbHash,
+    AssetVisibility? visibility,
+    String? livePhotoVideoId,
+    String? stackId,
+  }) {
+    return RemoteAsset(
+      id: id ?? this.id,
+      localId: localId ?? this.localId,
+      name: name ?? this.name,
+      ownerId: ownerId ?? this.ownerId,
+      checksum: checksum ?? this.checksum,
+      type: type ?? this.type,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      width: width ?? this.width,
+      height: height ?? this.height,
+      durationInSeconds: durationInSeconds ?? this.durationInSeconds,
+      isFavorite: isFavorite ?? this.isFavorite,
+      thumbHash: thumbHash ?? this.thumbHash,
+      visibility: visibility ?? this.visibility,
+      livePhotoVideoId: livePhotoVideoId ?? this.livePhotoVideoId,
+      stackId: stackId ?? this.stackId,
+    );
+  }
 }

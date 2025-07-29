@@ -23,6 +23,7 @@ class SyncEntityType {
 
   String toJson() => value;
 
+  static const authUserV1 = SyncEntityType._(r'AuthUserV1');
   static const userV1 = SyncEntityType._(r'UserV1');
   static const userDeleteV1 = SyncEntityType._(r'UserDeleteV1');
   static const assetV1 = SyncEntityType._(r'AssetV1');
@@ -56,10 +57,18 @@ class SyncEntityType {
   static const memoryToAssetDeleteV1 = SyncEntityType._(r'MemoryToAssetDeleteV1');
   static const stackV1 = SyncEntityType._(r'StackV1');
   static const stackDeleteV1 = SyncEntityType._(r'StackDeleteV1');
+  static const personV1 = SyncEntityType._(r'PersonV1');
+  static const personDeleteV1 = SyncEntityType._(r'PersonDeleteV1');
+  static const assetFaceV1 = SyncEntityType._(r'AssetFaceV1');
+  static const assetFaceDeleteV1 = SyncEntityType._(r'AssetFaceDeleteV1');
+  static const userMetadataV1 = SyncEntityType._(r'UserMetadataV1');
+  static const userMetadataDeleteV1 = SyncEntityType._(r'UserMetadataDeleteV1');
   static const syncAckV1 = SyncEntityType._(r'SyncAckV1');
+  static const syncResetV1 = SyncEntityType._(r'SyncResetV1');
 
   /// List of all possible values in this [enum][SyncEntityType].
   static const values = <SyncEntityType>[
+    authUserV1,
     userV1,
     userDeleteV1,
     assetV1,
@@ -93,7 +102,14 @@ class SyncEntityType {
     memoryToAssetDeleteV1,
     stackV1,
     stackDeleteV1,
+    personV1,
+    personDeleteV1,
+    assetFaceV1,
+    assetFaceDeleteV1,
+    userMetadataV1,
+    userMetadataDeleteV1,
     syncAckV1,
+    syncResetV1,
   ];
 
   static SyncEntityType? fromJson(dynamic value) => SyncEntityTypeTypeTransformer().decode(value);
@@ -132,6 +148,7 @@ class SyncEntityTypeTypeTransformer {
   SyncEntityType? decode(dynamic data, {bool allowNull = true}) {
     if (data != null) {
       switch (data) {
+        case r'AuthUserV1': return SyncEntityType.authUserV1;
         case r'UserV1': return SyncEntityType.userV1;
         case r'UserDeleteV1': return SyncEntityType.userDeleteV1;
         case r'AssetV1': return SyncEntityType.assetV1;
@@ -165,7 +182,14 @@ class SyncEntityTypeTypeTransformer {
         case r'MemoryToAssetDeleteV1': return SyncEntityType.memoryToAssetDeleteV1;
         case r'StackV1': return SyncEntityType.stackV1;
         case r'StackDeleteV1': return SyncEntityType.stackDeleteV1;
+        case r'PersonV1': return SyncEntityType.personV1;
+        case r'PersonDeleteV1': return SyncEntityType.personDeleteV1;
+        case r'AssetFaceV1': return SyncEntityType.assetFaceV1;
+        case r'AssetFaceDeleteV1': return SyncEntityType.assetFaceDeleteV1;
+        case r'UserMetadataV1': return SyncEntityType.userMetadataV1;
+        case r'UserMetadataDeleteV1': return SyncEntityType.userMetadataDeleteV1;
         case r'SyncAckV1': return SyncEntityType.syncAckV1;
+        case r'SyncResetV1': return SyncEntityType.syncResetV1;
         default:
           if (!allowNull) {
             throw ArgumentError('Unknown enum value to decode: $data');

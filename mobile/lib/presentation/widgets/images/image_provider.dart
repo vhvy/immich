@@ -5,14 +5,12 @@ import 'package:immich_mobile/domain/services/setting.service.dart';
 import 'package:immich_mobile/presentation/widgets/images/local_image_provider.dart';
 import 'package:immich_mobile/presentation/widgets/images/remote_image_provider.dart';
 
-ImageProvider getFullImageProvider(
-  BaseAsset asset, {
-  Size size = const Size(1080, 1920),
-}) {
+ImageProvider getFullImageProvider(BaseAsset asset, {Size size = const Size(1080, 1920)}) {
   // Create new provider and cache it
   final ImageProvider provider;
   if (_shouldUseLocalAsset(asset)) {
-    provider = LocalFullImageProvider(asset: asset as LocalAsset, size: size);
+    final id = asset is LocalAsset ? asset.id : (asset as RemoteAsset).localId!;
+    provider = LocalFullImageProvider(id: id, name: asset.name, size: size, type: asset.type);
   } else {
     final String assetId;
     if (asset is LocalAsset && asset.hasRemote) {
@@ -28,22 +26,16 @@ ImageProvider getFullImageProvider(
   return provider;
 }
 
-ImageProvider getThumbnailImageProvider({
-  BaseAsset? asset,
-  String? remoteId,
-  Size size = const Size.square(256),
-}) {
-  assert(
-    asset != null || remoteId != null,
-    'Either asset or remoteId must be provided',
-  );
+ImageProvider getThumbnailImageProvider({BaseAsset? asset, String? remoteId, Size size = const Size.square(256)}) {
+  assert(asset != null || remoteId != null, 'Either asset or remoteId must be provided');
 
   if (remoteId != null) {
     return RemoteThumbProvider(assetId: remoteId);
   }
 
   if (_shouldUseLocalAsset(asset!)) {
-    return LocalThumbProvider(asset: asset as LocalAsset, size: size);
+    final id = asset is LocalAsset ? asset.id : (asset as RemoteAsset).localId!;
+    return LocalThumbProvider(id: id, updatedAt: asset.updatedAt, name: asset.name, size: size);
   }
 
   final String assetId;
@@ -59,5 +51,4 @@ ImageProvider getThumbnailImageProvider({
 }
 
 bool _shouldUseLocalAsset(BaseAsset asset) =>
-    asset is LocalAsset &&
-    (!asset.hasRemote || !AppSetting.get(Setting.preferRemoteImage));
+    asset.hasLocal && (!asset.hasRemote || !AppSetting.get(Setting.preferRemoteImage));

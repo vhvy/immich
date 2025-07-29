@@ -15,5 +15,13 @@ final remoteAssetRepositoryProvider = Provider<RemoteAssetRepository>(
 final assetServiceProvider = Provider(
   (ref) => AssetService(
     remoteAssetRepository: ref.watch(remoteAssetRepositoryProvider),
+    localAssetRepository: ref.watch(localAssetRepository),
   ),
+);
+
+final placesProvider = FutureProvider<List<(String, String)>>(
+  (ref) => AssetService(
+    remoteAssetRepository: ref.watch(remoteAssetRepositoryProvider),
+    localAssetRepository: ref.watch(localAssetRepository),
+  ).getPlaces(),
 );

@@ -5,7 +5,6 @@ import 'package:immich_mobile/constants/enums.dart';
 import 'package:immich_mobile/extensions/translate_extensions.dart';
 import 'package:immich_mobile/presentation/widgets/action_buttons/base_action_button.widget.dart';
 import 'package:immich_mobile/providers/infrastructure/action.provider.dart';
-import 'package:immich_mobile/providers/infrastructure/timeline.provider.dart';
 import 'package:immich_mobile/providers/timeline/multiselect.provider.dart';
 import 'package:immich_mobile/widgets/common/immich_toast.dart';
 
@@ -19,9 +18,7 @@ class RemoveFromLockFolderActionButton extends ConsumerWidget {
       return;
     }
 
-    final result =
-        await ref.read(actionProvider.notifier).removeFromLockFolder(source);
-    await ref.read(timelineServiceProvider).reloadBucket();
+    final result = await ref.read(actionProvider.notifier).removeFromLockFolder(source);
     ref.read(multiSelectProvider.notifier).reset();
 
     final successMessage = 'remove_from_lock_folder_action_prompt'.t(
@@ -32,9 +29,7 @@ class RemoveFromLockFolderActionButton extends ConsumerWidget {
     if (context.mounted) {
       ImmichToast.show(
         context: context,
-        msg: result.success
-            ? successMessage
-            : 'scaffold_body_error_occurred'.t(context: context),
+        msg: result.success ? successMessage : 'scaffold_body_error_occurred'.t(context: context),
         gravity: ToastGravity.BOTTOM,
         toastType: result.success ? ToastType.success : ToastType.error,
       );
